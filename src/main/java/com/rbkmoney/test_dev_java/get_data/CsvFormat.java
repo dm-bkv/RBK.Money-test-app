@@ -1,6 +1,6 @@
 package com.rbkmoney.test_dev_java.get_data;
 
-/** Класс, описывающий формат CSV файла с транзакциями */
+/** Класс, описывающий формат принимаемого CSV файла с транзакциями */
 public enum CsvFormat {
 
     /** ID транзакции */
@@ -11,7 +11,7 @@ public enum CsvFormat {
     PDATA(2);
 
     /** Номер столбца в CSV файле */
-    int columnNumber;
+    private int columnNumber;
 
     CsvFormat(int number) {
         this.columnNumber = number;

@@ -1,0 +1,10 @@
+/*
+        //получение списка транзакции из файла
+        //ExecutorService executor = new Ca
+        while(transactionQueue.size() > 0) {
+            Transaction tran = validate(transactionQueue.poll());
+            if (tran != null) {
+                invalidTransactions.add(tran);
+            }
+        }
+*/

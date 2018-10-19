@@ -1,6 +1,5 @@
 package com.rbkmoney.test_dev_java.get_data;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,7 +12,7 @@ import java.util.Objects;
 public class Transaction {
 
     /** ID транзакции */
-    private BigInteger id;
+    private Integer id;
     /** Сумма транзакции */
     private Float amount;
     /** Дата проведения транзакции */
@@ -26,18 +25,18 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(BigInteger id, Float amount, Date date, String data) {
+    public Transaction(Integer id, Float amount, Date date, String data) {
         this.id = id;
         this.amount = amount;
         this.date = date;
         this.data = data;
     }
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
