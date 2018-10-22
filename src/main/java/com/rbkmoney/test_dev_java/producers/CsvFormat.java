@@ -1,4 +1,4 @@
-package com.rbkmoney.test_dev_java.get_data;
+package com.rbkmoney.test_dev_java.producers;
 
 /** Класс, описывающий формат принимаемого CSV файла с транзакциями */
 public enum CsvFormat {

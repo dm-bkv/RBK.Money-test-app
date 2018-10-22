@@ -8,3 +8,102 @@
             }
         }
 */
+
+
+/*
+
+    @Override
+    public void execute() throws Exception {
+
+        //Date date = new Date();
+        //SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd_hh:mm:ss");
+        //TransportQueue<Transaction> transportQueue = new TransportQueue("LoadCsvData_" + formatForDateNow.format(date));
+
+        ExecutorService service = Executor.getExecutorService();
+        Future<?> futureProducer = service.submit(() -> producer.produce());
+
+        TransactionsFacade transactionsFacade = new TransactionsDbHelper(DataSource.getInstance());
+        List<Transaction> invalidTransactions = new CopyOnWriteArrayList<>();
+//        InvalidTransactionsConsumer invalidTransactionsConsumer =
+//                new InvalidTransactionsConsumer(transactionsFacade, transportQueue, invalidTransactions);
+        Future<?> futureConsumer = service.submit(() -> {
+            Thread.currentThread().setName("InvalidTransactionsConsumer-" + Thread.currentThread().getId());
+            consumer.consume();
+        });
+
+        futureProducer.get();
+        futureConsumer.get();
+
+        //Properties props = appProperties.getProperties();
+        //Path reportPath = Paths.get(props.getProperty("csv.dir")).getParent();
+        //Report report = getTransactionReport(reportType, reportPath, invalidTransactions);
+        report.generateReport();
+
+    }
+
+ */
+
+ /*
+        <!--<bean id="ProducersFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">-->
+        <!--<property name="serviceLocatorInterface" value="com.rbkmoney.test_dev_java.producers.Producer" />-->
+        <!--<property name="serviceMappings" >-->
+        <!--<props>-->
+        <!--<prop key="csv">TransactionsFromCsvProducer</prop>-->
+        <!--<prop key="json">TransactionsFromJsonProducer</prop>-->
+        <!--</props>-->
+        <!--</property>-->
+        <!--</bean>-->
+
+
+        <!--<bean id="ConsumersFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">-->
+        <!--<property name="serviceLocatorInterface" value="com.rbkmoney.test_dev_java.consumers.Consumer" />-->
+        <!--<property name="serviceMappings">-->
+        <!--<props>-->
+        <!--<prop key="invalid_transactions">InvalidTransactionsConsumer</prop>-->
+        <!--<prop key="valid_transactions">ValidTransactionsConsumer</prop>-->
+        <!--</props>-->
+        <!--</property>-->
+        <!--</bean>-->
+
+        <!--<bean name="TransactionsFromJsonProducer" class="com.rbkmoney.test_dev_java.producers.TransactionsFromJsonProducer"/>-->
+
+        <!--<bean name="InvalidTransactionsConsumer" class="com.rbkmoney.test_dev_java.consumers.InvalidTransactionsConsumer">-->
+        <!--<constructor-arg name="transportQueue" ref="TransactionTransportQueue"/>-->
+        <!--<constructor-arg name="transactionFacade" ref="TransactionsJdbcHelper"/>-->
+        <!--<constructor-arg name="service" ref="ExecutorService"/>-->
+        <!--<constructor-arg name="command" ref=""/>-->
+        <!--<constructor-arg name="invalidTransactions" ref="InvalidTransactionsList"/>-->
+        <!--</bean>-->
+
+<!--<bean name="ValidTransactionsConsumer" class="com.rbkmoney.test_dev_java.consumers.ValidTransactionsConsumers"/>-->
+
+ */
+
+/*
+
+
+    <!-- Reports factory -->
+    <bean id="ReportsFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
+        <property name="serviceLocatorInterface" value="com.rbkmoney.test_dev_java.commands.Command" />
+        <property name="serviceMappings">
+            <props>
+                <prop key="csv">CreateCsvTransactionReportCommand</prop>
+                <prop key="pdf">CreatePdfTransactionReportCommand</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean name="CreateCsvTransactionReportCommand" class="com.rbkmoney.test_dev_java.commands.reports.CreateCsvTransactionReportCommand">
+        <constructor-arg name="transactions" ref="InvalidTransactionsList"/>
+        <constructor-arg name="props" ref="AppProps" />
+    </bean>
+
+    <bean name="CreatePdfTransactionReportCommand" class="com.rbkmoney.test_dev_java.commands.reports.CreatePdfTransactionReportCommand"/>
+
+    <bean name="TransactionsFromCsvProducer" class="com.rbkmoney.test_dev_java.producers.TransactionsFromCsvProducer">
+        <constructor-arg name="appProperties" ref="AppProps"/>
+        <constructor-arg name="transportQueue" ref="TransactionTransportQueue">
+        </constructor-arg>
+    </bean>
+
+*/

@@ -1,15 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context.xsd">
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <bean name="Application" class="com.rbkmoney.test_dev_java.Application"></bean>
 
+    <bean id="ProducerConsumerModelCommand" class="com.rbkmoney.test_dev_java.commands.ProducerConsumerModelCommand">
+        <constructor-arg name="producersFactory" ref="ProducersFactory"/>
+        <constructor-arg name="consumersFactory" ref="ConsumersFactory"/>
+        <constructor-arg name="service" ref="ExecutorService"/>
+    </bean>
+
+    <!-- Producers factory -->
+    <bean id="ProducersFactory" class="com.rbkmoney.test_dev_java.producers.ProducersFactory">
+        <constructor-arg name="transportQueue" ref="TransactionTransportQueue"/>
+        <constructor-arg name="props" ref="AppProps"/>
+    </bean>
+
+    <!-- Consumers factory -->
+    <bean id="ConsumersFactory" class="com.rbkmoney.test_dev_java.consumers.ConsumersFactory">
+        <constructor-arg name="transportQueue" ref="TransactionTransportQueue"/>
+        <constructor-arg name="transactionFacade" ref="TransactionsJdbcHelper"/>
+        <constructor-arg name="service" ref="ExecutorService"/>
+        <constructor-arg name="commandsFactory" ref="CommandsFactory"/>
+        <constructor-arg name="invalidTransactions" ref="InvalidTransactionsList"/>
+        <constructor-arg name="appProperties" ref="AppProps"/>
+    </bean>
+
+    <!-- Commands factory -->
+    <bean id="CommandsFactory" class="com.rbkmoney.test_dev_java.commands.CommandsFactory">
+        <constructor-arg name="transactions" ref="InvalidTransactionsList"/>
+        <constructor-arg name="appProperties" ref="AppProps"/>
+    </bean>
+
+    <bean id="InvalidTransactionsList" class="java.util.concurrent.CopyOnWriteArrayList"/> <!-- -->
+
+    <bean id="TransactionsJdbcHelper" class="com.rbkmoney.test_dev_java.consumers.helpers.TransactionsJdbcHelper">
+        <constructor-arg ref="DataSource"/>
+    </bean>
+
+    <bean id="TransactionTransportQueue" class="com.rbkmoney.test_dev_java.common.TransactionTransportQueue"> <!--class="com.rbkmoney.test_dev_java.common.TransportQueue&lt;Transaction&gt;">-->
+        <constructor-arg value="TransactionTransportQueue"/>
+    </bean>
+
+    <bean id="AppProps" class="com.rbkmoney.test_dev_java.AppProperties"/>
+
+    <bean id="DataSource" class="com.rbkmoney.test_dev_java.common.DataSource" scope="singleton" destroy-method="closeDataSource"/>
+
+    <bean id="ExecutorService" class="java.util.concurrent.Executors" factory-method="newCachedThreadPool" destroy-method="shutdownNow"/>
 
 </beans>

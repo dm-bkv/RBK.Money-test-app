@@ -1,6 +1,6 @@
-package com.rbkmoney.test_dev_java.get_data;
+package com.rbkmoney.test_dev_java.consumers.helpers;
 
-import java.sql.SQLException;
+import com.rbkmoney.test_dev_java.common.Transaction;
 
 /** Фасад для работы с существующими в хранилище транзакциями */
 public interface TransactionsFacade {
@@ -11,6 +11,6 @@ public interface TransactionsFacade {
      * @param id идентиикатор транзакции
      * @return в случае успешного поиска возвращает данные транзакции - иначе null
      */
-    Transaction getTransaction(Integer id) throws SQLException;
+    Transaction getTransaction(Integer id) throws Exception;
 
 }
