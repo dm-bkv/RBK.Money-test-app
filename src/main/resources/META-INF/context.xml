@@ -27,7 +27,7 @@
         <constructor-arg name="transactionFacade" ref="TransactionsJdbcHelper"/>
         <constructor-arg name="service" ref="ExecutorService"/>
         <constructor-arg name="commandsFactory" ref="CommandsFactory"/>
-        <constructor-arg name="invalidTransactions" ref="InvalidTransactionsList"/>
+        <constructor-arg name="transactionList" ref="InvalidTransactionsList"/>
         <constructor-arg name="appProperties" ref="AppProps"/>
     </bean>
 

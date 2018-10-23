@@ -7,9 +7,10 @@ import com.rbkmoney.test_dev_java.common.TransportQueue;
 /** Фабрика поставщиков */
 public class ProducersFactory {
 
-    private TransportQueue<Transaction> transportQueue;
-
-    private AppProperties props;
+    /** Очередь транзакций */
+    private final TransportQueue<Transaction> transportQueue;
+    /** Настройки приложения */
+    private final AppProperties props;
 
     public ProducersFactory(TransportQueue<Transaction> transportQueue, AppProperties props) {
         this.transportQueue = transportQueue;

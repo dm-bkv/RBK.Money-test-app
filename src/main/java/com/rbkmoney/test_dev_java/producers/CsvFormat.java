@@ -11,7 +11,7 @@ public enum CsvFormat {
     PDATA(2);
 
     /** Номер столбца в CSV файле */
-    private int columnNumber;
+    private final int columnNumber;
 
     CsvFormat(int number) {
         this.columnNumber = number;

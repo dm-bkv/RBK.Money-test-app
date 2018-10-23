@@ -22,8 +22,8 @@ public class TransactionsFromCsvProducer implements Producer {
 
     /** Логгер */
     private static final Logger LOG = LoggerFactory.getLogger(TransactionsFromCsvProducer.class);
-    /** */
-    private TransportQueue<Transaction> transportQueue;
+    /** Очередь для заполнения */
+    private final TransportQueue<Transaction> transportQueue;
     /** Путь до файла */
     private Path path = null;
     /** Признак присутствия в файле заголовка */

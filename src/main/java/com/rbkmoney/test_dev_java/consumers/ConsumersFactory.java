@@ -13,22 +13,28 @@ import java.util.concurrent.ExecutorService;
 /** Фабрика потребителей */
 public class ConsumersFactory {
 
-    private TransactionsFacade transactionFacade;
-    private TransportQueue<Transaction> transportQueue;
-    private List<Transaction> invalidTransactions;
-    private Command command;
-    private ExecutorService service;
-    private AppProperties appProperties;
+    /** Фасад для работы с транзакциями из хранилища */
+    private final TransactionsFacade transactionFacade;
+    /** Очередь транзакций на обработку */
+    private final TransportQueue<Transaction> transportQueue;
+    /** Результирующий список транзакций */
+    private final List<Transaction> transactionList;
+    /** Команда для обработки результирующих данных */
+    private final Command command;
+    /** Пул потоков */
+    private final ExecutorService service;
+    /** Настройки приложения */
+    private final AppProperties appProperties;
 
     public ConsumersFactory(TransactionsFacade transactionFacade,
                             TransportQueue transportQueue,
-                            List<Transaction> invalidTransactions,
+                            List<Transaction> transactionList,
                             CommandsFactory commandsFactory,
                             ExecutorService service,
                             AppProperties appProperties) throws Exception {
         this.transactionFacade = transactionFacade;
         this.transportQueue = transportQueue;
-        this.invalidTransactions = invalidTransactions;
+        this.transactionList = transactionList;
         this.command = commandsFactory.getCommand();
         this.service = service;
         this.appProperties = appProperties;
@@ -37,7 +43,7 @@ public class ConsumersFactory {
     public Consumer getConsumer() throws Exception {
         switch (appProperties.getConsumerActionType()) {
             case GET_INVALID_TRANSACTIONS:
-                return new InvalidTransactionsConsumer(transactionFacade, transportQueue, invalidTransactions, command, service);
+                return new InvalidTransactionsConsumer(transactionFacade, transportQueue, transactionList, command, service);
 
             case GET_VALID_TRANSACTIONS:
                 return new ValidTransactionsConsumers();

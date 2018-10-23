@@ -5,7 +5,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -19,17 +20,11 @@ public class DataSource {
 
     /** Логгер */
     private final static Logger LOG = LoggerFactory.getLogger(DataSource.class);
-    /** Экземпляр источника данных */
-    private static DataSource dataSource = new DataSource();
-    /** */
+    /** Пул соединений */
     private HikariDataSource hikariDataSource;
 
-//    public static DataSource getInstance() {
-//        return dataSource;
-//    }
-
     /**
-     * Получение источника данных
+     * Получение пула соединений
      *
      * Примечание: по чути можно было вынести весь метод на статику, но в таком случае если при подключении к БД
      *             будут проблемы, то они "выскочат" раньше чем надо как по мне. С другой стороны если не имеем
@@ -46,30 +41,33 @@ public class DataSource {
         return hikariDataSource;
     }
 
+    /**
+     * Загрузка пула соединений
+     */
     private void loadDataSource() throws Exception {
+        LOG.info("Инициализация пула соединений Hikari...");
         Properties props = new Properties();
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream("src/main/resources/META-INF/source_data.properties");
-            props.load(fis);
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        try(InputStream resourceStream = loader.getResourceAsStream("source_data.properties")) {
+            props.load(resourceStream);
             HikariConfig config = new HikariConfig();
             config.setDriverClassName(props.getProperty("dataSource.driverClassName"));
             config.setJdbcUrl(props.getProperty("dataSource.url"));
             config.setUsername(props.getProperty("dataSource.username"));
             config.setPassword(props.getProperty("dataSource.password"));
             hikariDataSource = new HikariDataSource(config);
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.error("Возникла ошибка при получении источника данных:\n {}", e);
             throw new Exception("Возникла ошибка при получении источника данных: \n" + e);
         }
+        LOG.info("Пул соединений Hikari проинициализирован!");
     }
 
+    /** Закрытие пула соединений */
     public void closeDataSource() {
         if (hikariDataSource != null) {
             hikariDataSource.close();
         }
     }
-
-    //private DataSource() {}
 
 }

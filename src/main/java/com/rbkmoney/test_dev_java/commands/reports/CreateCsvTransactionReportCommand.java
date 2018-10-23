@@ -19,11 +19,11 @@ public class CreateCsvTransactionReportCommand implements Command {
     /** Логгер */
     private static final Logger LOG = LoggerFactory.getLogger(CreateCsvTransactionReportCommand.class);
     /** Список транзакций */
-    private List<Transaction> transactions;
+    private final List<Transaction> transactions;
     /** Параметры приложения */
-    private Path path;
+    private final Path path;
     /** Наименование отчета */
-    private String reportName;
+    private final String reportName;
     /** Заголовок отчета */
     private static final String HEADER = "ID;AMOUNT;DATA;COMMENT;\n";
     /** Разделитель данных в отчете */
@@ -46,7 +46,7 @@ public class CreateCsvTransactionReportCommand implements Command {
         }
         int total = transactions.size();
         csvReport.append("TOTAL:;").append(total).append(";;;\n");
-        LOG.error("result:\n" + csvReport);
+        LOG.trace("Report:\n" + csvReport);
         saveCsvReport(csvReport);
     }
 
@@ -59,7 +59,8 @@ public class CreateCsvTransactionReportCommand implements Command {
         Date date = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("_yyyy-MM-dd_hh-mm-ss-S");
         String csvReportName = reportName + formatForDateNow.format(date) + ".csv";
-        Path reportPath = Paths.get(path.toString(), csvReportName);
+        Path reportPath = Paths.get(path == null ? "" : path.toString(), csvReportName);
+        LOG.info("CSV отчет будет сохранен в {}" + reportPath.toAbsolutePath().toString());
         try(FileWriter writer = new FileWriter(reportPath.toString(), true)) {
             writer.write(csvReport.toString());
             writer.flush();

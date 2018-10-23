@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class CommandsFactory {
 
-    private List<Transaction> transactions;
+    private final List<Transaction> transactions;
 
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     public CommandsFactory(List<Transaction> transactions, AppProperties appProperties) {
         this.transactions = transactions;

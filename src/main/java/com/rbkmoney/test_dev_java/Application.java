@@ -4,7 +4,7 @@ import com.rbkmoney.test_dev_java.commands.ProducerConsumerModelCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /** Основной класс приложения.
  *
@@ -19,6 +19,8 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  *             параметры задавать там же.
  *           - в принципе в качестве источника исходных данных могут выступать разные БД, но в рамках данной работы
  *             считаю, что все данные по транзакциям хранятся в рамках одной БД
+ *           - ограничений не было, поэтому конфигурацию spring сделал через xml
+ *           - для того, чтобы JAR'ик выдал отчеты в директории с ним должен находится файл ptxs.csv
  *
  * */
 public class Application {
@@ -29,11 +31,13 @@ public class Application {
     public static void main(String[] args) {
         LOG.info("Начало работы приложения...");
         ApplicationContext context =
-                new FileSystemXmlApplicationContext("src/main/resources/META-INF/context.xml");
+                new ClassPathXmlApplicationContext("META-INF/context.xml"); //"src/main/resources/META-INF/context.xml");
         try {
             context.getBean(ProducerConsumerModelCommand.class).execute();
         } catch (Throwable e) {
             LOG.error("Во время работы приложения произошла ошибка: {}", e);
+        } finally {
+            ((ClassPathXmlApplicationContext) context).close();
         }
         LOG.info("Приложение заверщено!");
     }

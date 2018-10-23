@@ -21,15 +21,15 @@ public class InvalidTransactionsConsumer implements Consumer {
     /** Логгер */
     private static final Logger LOG = LoggerFactory.getLogger(InvalidTransactionsConsumer.class);
     /** Фасад для работы с существующими в хранилище транзакциями */
-    private TransactionsFacade transactionFacade;
+    private final TransactionsFacade transactionFacade;
     /** Очередь с транзакциями для обработки */
-    private TransportQueue transportQueue;
+    private final TransportQueue transportQueue;
     /** Список невалидных транзакций*/
-    private List<Transaction> invalidTransactions;
+    private final List<Transaction> invalidTransactions;
     /** Команда для обработки результата */
-    private Command command;
+    private final Command command;
     /** Пул потоков */
-    private ExecutorService service;
+    private final ExecutorService service;
 
     /** Размер пула параллельно обрабатываемых транзакций */
     private static final int THREAD_POOL_SIZE = 20;
@@ -117,7 +117,7 @@ public class InvalidTransactionsConsumer implements Consumer {
                 return transaction;
             } else if (!transaction.getAmount().equals(sourceTransaction.getAmount())) {
                 transaction.setComment("Разница по сумме транзакции (текущая транзакция " + transaction.getAmount() +
-                        "; транзакция в источнике " + sourceTransaction.getAmount() +") ");
+                        ", транзакция в источнике " + sourceTransaction.getAmount() +") ");
                 return transaction;
             } else {
                 return new Transaction();

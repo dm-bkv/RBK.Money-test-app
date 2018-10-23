@@ -9,7 +9,7 @@ public enum ConsumerActionType {
     GET_VALID_TRANSACTIONS("getValidTransactions");
 
     /** Наименование действия, которое нужно будет выполнять */
-    private String actionName;
+    private final String actionName;
 
     ConsumerActionType(String actionName) {
         this.actionName = actionName;
